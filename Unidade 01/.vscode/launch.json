@@ -1,0 +1,140 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${fileBasenameNoExtension}"
+        },
+        {
+            "type": "java",
+            "name": "ArraysMatrizes",
+            "request": "launch",
+            "mainClass": "ArraysMatrizes",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Condicionais",
+            "request": "launch",
+            "mainClass": "Condicionais",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ExemploDadosPrimitivos",
+            "request": "launch",
+            "mainClass": "ExemploDadosPrimitivos",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio1",
+            "request": "launch",
+            "mainClass": "Exercicio1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Hello",
+            "request": "launch",
+            "mainClass": "Hello",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Lacos",
+            "request": "launch",
+            "mainClass": "Lacos",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Objetos",
+            "request": "launch",
+            "mainClass": "Objetos",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Pessoa2",
+            "request": "launch",
+            "mainClass": "Pessoa2",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex10_uni1",
+            "request": "launch",
+            "mainClass": "ex10_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex1_uni1",
+            "request": "launch",
+            "mainClass": "ex1_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex2_uni1",
+            "request": "launch",
+            "mainClass": "ex2_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex3_uni1",
+            "request": "launch",
+            "mainClass": "ex3_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex4_uni1",
+            "request": "launch",
+            "mainClass": "ex4_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex5_uni1",
+            "request": "launch",
+            "mainClass": "ex5_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex6_uni1",
+            "request": "launch",
+            "mainClass": "ex6_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex7_uni1",
+            "request": "launch",
+            "mainClass": "ex7_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex8_uni1",
+            "request": "launch",
+            "mainClass": "ex8_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "ex9_uni1",
+            "request": "launch",
+            "mainClass": "ex9_uni1",
+            "projectName": "Unidade 01_ef6d6363"
+        }
+    ]
+}
