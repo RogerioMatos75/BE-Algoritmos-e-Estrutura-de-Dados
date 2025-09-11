@@ -6,6 +6,69 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GerenciadorDeEstoque",
+            "request": "launch",
+            "mainClass": "Exercicio10.GerenciadorDeEstoque",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio9",
+            "request": "launch",
+            "mainClass": "Exercicio9",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio8",
+            "request": "launch",
+            "mainClass": "Exercicio8",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio7",
+            "request": "launch",
+            "mainClass": "Exercicio7",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio6",
+            "request": "launch",
+            "mainClass": "Exercicio6",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio5",
+            "request": "launch",
+            "mainClass": "Exercicio5",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio4",
+            "request": "launch",
+            "mainClass": "Exercicio4",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio3",
+            "request": "launch",
+            "mainClass": "Exercicio3",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
+            "name": "Exercicio2",
+            "request": "launch",
+            "mainClass": "Exercicio2",
+            "projectName": "Unidade 01_ef6d6363"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${fileBasenameNoExtension}"

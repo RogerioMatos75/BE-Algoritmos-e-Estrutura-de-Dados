@@ -1,5 +1,9 @@
 {
     "java.project.sourcePaths": [
         "src"
-    ]
+    ],
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "jackpot.hints.rewrite.try-with-resources": false
 }
