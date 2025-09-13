@@ -1,10 +1,9 @@
 ```java 
-
 Compilar o código: 
-javac src/Exercicio_4_Dialogo.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
+javac src/Exercicio_7_Dialogo.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
 
 Executar o programa: 
-java -cp src Exercicio_4_Dialogo //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
+java -cp src Exercicio_7_Dialogo //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
 ```
 
 Listas (ArrayList): 
@@ -379,15 +378,290 @@ Suponha que você está desenvolvendo uma ferramenta que permite ao usuário vis
  
 Filas: 
 
+```java
+import java.util.ArrayList;
+import java.util.Stack;
+
+/**
+ * Solução para o Exercício 5 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Crie um programa que inverta a ordem dos elementos em um ArrayList 
+ * de inteiros utilizando uma pilha como estrutura auxiliar.
+ * 
+ * "Além da solução padrão solicitada, criei também uma versão `Exercicio_5_Dialogo.java` com interface
+ * gráfica (JOptionPane) para demonstrar a aplicação do algoritmo em um contexto com interação visual
+ * com o usuário, explorando outros recursos da plataforma Java."
+ *
+ * Autor: Rogério
+ */
+public class Exercicio_5 {
+
+    public static void main(String[] args) {
+        System.out.println(); // Espaçamento inicial
+
+        // Cria e preenche a lista de números.
+        ArrayList<Integer> numeros = new ArrayList<>();
+        numeros.add(1);
+        numeros.add(2);
+        numeros.add(3);
+        numeros.add(4);
+        numeros.add(5);
+
+        System.out.println("===========================================");
+        System.out.println("      Inversor de ArrayList com Pilha");
+        System.out.println("===========================================");
+        
+        System.out.println("Lista Original: " + numeros);
+        System.out.println();
+
+        // Inverte a lista usando o método auxiliar
+        inverterArrayListComPilha(numeros);
+
+        System.out.println("Lista Invertida: " + numeros);
+        
+        System.out.println("===========================================");
+        System.out.println();
+    }
+
+    /**
+     * Inverte a ordem dos elementos de um ArrayList de inteiros usando uma Pilha.
+     * 
+     * @param lista O ArrayList de inteiros a ser invertido.
+     */
+    public static void inverterArrayListComPilha(ArrayList<Integer> lista) {
+        // 1. Cria uma pilha para servir como estrutura de dados auxiliar.
+        Stack<Integer> pilha = new Stack<>();
+
+        // 2. Empurra todos os elementos da lista para a pilha.
+        // O primeiro elemento da lista (índice 0) ficará no fundo da pilha,
+        // e o último elemento ficará no topo.
+        for (Integer numero : lista) {
+            pilha.push(numero);
+        }
+
+        // 3. Substitui os elementos na lista original pelos elementos da pilha.
+        // O método pop() remove e retorna o elemento do topo da pilha (LIFO).
+        // Assim, o último elemento a entrar será o primeiro a sair, invertendo a ordem.
+        for (int i = 0; i < lista.size(); i++) {
+            lista.set(i, pilha.pop());
+        }
+    }
+}
+```
+
 ## Exercicio 6 - Implementação de um Sistema de Fila de Espera: 
 
 Em uma clínica, os pacientes aguardam atendimento em uma fila de espera. Crie um sistema que simule essa fila, permitindo adicionar, remover e exibir a ordem de atendimento dos pacientes. Isso ajudará na organização e no controle da ordem de atendimento. 
+
+```java
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+/**
+ * Solução para o Exercício 6 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ *
+ * Descrição: Crie um sistema que simule uma fila de espera de pacientes em uma
+ * clínica, permitindo adicionar, remover e exibir a ordem de atendimento.
+ *
+ * "Além da solução padrão solicitada, criarei também uma versão
+ * `Exercicio_6_Dialogo.java` com interface gráfica (JOptionPane) para
+ * demonstrar a aplicação do algoritmo em um contexto com interação visual com o
+ * usuário, explorando outros recursos da plataforma Java."
+ *
+ * Autor: Rogério
+ */
+public class Exercicio_6 {
+
+    // Scanner e Fila declarados como estáticos para serem acessíveis em toda a classe.
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final Queue<String> filaDePacientes = new LinkedList<>();
+
+    public static void main(String[] args) {
+        boolean executando = true;
+
+        // Loop principal do menu. Continua executando até que o usuário escolha sair.
+        while (executando) {
+            exibirMenu();
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    adicionarPaciente();
+                    break;
+                case 2:
+                    chamarProximo();
+                    break;
+                case 3:
+                    exibirFila();
+                    break;
+                case 4:
+                    executando = false;
+                    break;
+                default:
+                    System.out.println("\nOpção inválida. Por favor, escolha um número entre 1 e 4.");
+            }
+        }
+
+        System.out.println("\n=================================================");
+        System.out.println("   Sistema de Fila da Clínica Finalizado");
+        System.out.println("=================================================");
+        System.out.println();
+        scanner.close(); // Fecha o scanner para liberar recursos.
+    }
+
+    /**
+     * Exibe o menu de opções formatado no console.
+     */
+    private static void exibirMenu() {
+        System.out.println("\n=================================================");
+        System.out.println("      Sistema de Fila de Espera da Clínica");
+        System.out.println("=================================================");
+        System.out.println("1. Adicionar novo paciente à fila");
+        System.out.println("2. Chamar próximo paciente para atendimento");
+        System.out.println("3. Exibir fila de pacientes atual");
+        System.out.println("4. Sair do sistema");
+        System.out.println("=================================================");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    /**
+     * Lê e valida a entrada numérica do usuário para a opção do menu.
+     *
+     * @return O número da opção escolhida, ou -1 se a entrada for inválida.
+     */
+    private static int lerOpcao() {
+        try {
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consome a quebra de linha pendente.
+            return opcao;
+        } catch (InputMismatchException e) {
+            System.out.println("\nErro: Entrada inválida. Por favor, digite um número.");
+            scanner.nextLine(); // Limpa o buffer do scanner para a próxima leitura.
+            return -1; // Retorna um valor inválido para repetir o loop.
+        }
+    }
+
+    /**
+     * Solicita o nome de um paciente e o adiciona ao final da fila.
+     */
+    private static void adicionarPaciente() {
+        System.out.print("\nDigite o nome completo do paciente: ");
+        String nome = scanner.nextLine();
+        filaDePacientes.add(nome); // Adiciona o paciente ao FINAL da fila.
+        System.out.println("Paciente \"" + nome + "\" foi adicionado à fila com sucesso.");
+    }
+
+    /**
+     * Remove e exibe o próximo paciente do início da fila.
+     */
+    private static void chamarProximo() {
+        if (filaDePacientes.isEmpty()) {
+            System.out.println("\nA fila de espera está vazia. Não há pacientes para chamar.");
+        } else {
+            // O método poll() remove e retorna o elemento no INÍCIO da fila.
+            String proximo = filaDePacientes.poll();
+            System.out.println("\nPróximo paciente chamado para atendimento: \"" + proximo + "\"");
+        }
+    }
+
+    /**
+     * Exibe todos os pacientes na fila na ordem de chegada, sem removê-los.
+     */
+    private static void exibirFila() {
+        System.out.println("\n----------- FILA DE ESPERA ATUAL -----------");
+        if (filaDePacientes.isEmpty()) {
+            System.out.println("A fila está vazia.");
+        } else {
+            int posicao = 1;
+            // Itera sobre a fila para mostrar cada paciente e sua posição.
+            for (String paciente : filaDePacientes) {
+                System.out.println(posicao + ". " + paciente);
+                posicao++;
+            }
+        }
+        System.out.println("--------------------------------------------");
+    }
+}
+```
 
 ## Exercicio 7 - Ordem de Chegada: 
 
 Imagine que você está organizando o fluxo de clientes em uma loja durante uma promoção. Crie um programa que simule a ordem de chegada e exiba a ordem de saída, respeitando a fila de atendimento. 
  
 Maps (HashMap): 
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.List;
+import java.util.Arrays;
+
+/**
+ * Solução para o Exercício 7 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ *
+ * Descrição: Crie um programa que simule a ordem de chegada e exiba a ordem 
+ * de saída de clientes em uma loja, respeitando a fila de atendimento.
+*
+ * "Além da solução padrão solicitada, criarei também uma versão
+ * `Exercicio_7_Dialogo.java` com interface gráfica (JOptionPane) para
+ * demonstrar a aplicação do algoritmo em um contexto com interação visual com o
+ * usuário, explorando outros recursos da plataforma Java."
+ *
+ * Autor: Rogério
+ */
+public class Exercicio_7 {
+
+    public static void main(String[] args) {
+        System.out.println(); // Espaçamento inicial no terminal
+
+        // A fila de clientes, implementada com LinkedList.
+        Queue<String> filaClientes = new LinkedList<>();
+        
+        // Lista de clientes que chegarão à loja para a simulação.
+        List<String> clientesChegando = Arrays.asList("Mariana", "Felipe", "Juliana", "Ricardo", "Patrícia");
+
+        // --- 1. Simulação da Chegada dos Clientes ---
+        System.out.println("===============================================");
+        System.out.println("    LOJA ABERTA - Início da Simulação de Fila");
+        System.out.println("===============================================");
+        System.out.println();
+
+        System.out.println("--- Chegada dos Clientes ---");
+        for (String cliente : clientesChegando) {
+            filaClientes.add(cliente); // Adiciona o cliente ao final da fila.
+            System.out.println("-> O cliente '" + cliente + "' chegou e entrou na fila.");
+        }
+        
+        System.out.println();
+        System.out.println("Fila de espera atual: " + filaClientes);
+        System.out.println();
+
+
+        // --- 2. Simulação do Atendimento (Saída dos Clientes) ---
+        System.out.println("--- Atendimento dos Clientes (Ordem de Saída) ---");
+        int clienteNumero = 1;
+        // O loop continua enquanto houver clientes na fila.
+        while (!filaClientes.isEmpty()) {
+            // poll() remove e retorna o cliente do início da fila (o que chegou primeiro).
+            String clienteAtendido = filaClientes.poll(); 
+            System.out.println("<- Atendimento #" + clienteNumero + ": O cliente '" + clienteAtendido + "' foi atendido e saiu.");
+            clienteNumero++;
+        }
+
+        System.out.println();
+        System.out.println("Todos os clientes foram atendidos!");
+        System.out.println("Fila de espera atual: " + filaClientes);
+        
+        System.out.println();
+        System.out.println("===============================================");
+        System.out.println("      FIM DA SIMULAÇÃO - Loja Fechada");
+        System.out.println("===============================================");
+        System.out.println();
+    }
+}
+```
 
 ## Exercicio 8 - Contagem de Palavras: 
 
@@ -403,7 +677,7 @@ Algoritmos de Ordenação:
 
 Imagine que você está desenvolvendo um sistema de classificação que exibe os produtos mais populares em uma loja online. Escolha um algoritmo de ordenação (ex: Bubble Sort, Quick Sort, Merge Sort) e implemente-o para ordenar uma lista de produtos com base nas vendas, de forma decrescente, para que os mais vendidos apareçam primeiro. 
 
-Instruções de Entrega
+**Instruções de Entrega**
 
 	Realize todos os exercícios da lista na linguagem Java e aplique os conceitos solicitados em cada questão. 
 	Envie o código para análise, pode ser por repositório do GitHub ou a pasta compactada com seu código. 
