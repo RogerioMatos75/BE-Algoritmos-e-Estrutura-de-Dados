@@ -1,9 +1,9 @@
 ```java 
 Compilar o código: 
-javac src/Exercicio_7_Dialogo.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
+javac src/Exercicio_10_Dialogo.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
 
 Executar o programa: 
-java -cp src Exercicio_7_Dialogo //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
+java -cp src Exercicio_10_Dialogo //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
 ```
 
 Listas (ArrayList): 
@@ -667,15 +667,348 @@ public class Exercicio_7 {
 
 Você precisa criar uma análise de palavras usadas em um artigo para entender quais termos aparecem com maior frequência. Escreva um programa que conte a frequência de cada palavra em uma frase, utilizando um HashMap, para identificar as palavras mais comuns. 
 
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Solução para o Exercício 8 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ *
+ * Descrição: Escreva um programa que conte a frequência de cada palavra em uma
+ * frase, utilizando um HashMap, para identificar as palavras mais comuns.
+ *
+ * "Além da solução padrão solicitada, criarei também uma versão
+ * `Exercicio_8_Dialogo.java` com interface gráfica (JOptionPane) para
+ * demonstrar a aplicação do algoritmo em um contexto com interação visual com o
+ * usuário, explorando outros recursos da plataforma Java."
+ *
+ * Autor: Rogério (com assistência do Gemini)
+ */
+public class Exercicio_8 {
+
+    public static void main(String[] args) {
+        System.out.println(); // Espaçamento inicial no terminal
+
+        // 1. Artigo de exemplo para análise.
+        String artigo = "A persistência é o caminho do êxito. O estudo constante e a prática dedicada são o segredo do sucesso. Estudo e prática levam à perfeição.";
+
+        // 2. Exibimos o artigo original.
+        System.out.println("========================================================");
+        System.out.println("        Analisador de Frequência de Palavras");
+        System.out.println("========================================================");
+        System.out.println();
+        System.out.println("--- Artigo Original ---");
+        System.out.println(artigo);
+        System.out.println();
+
+        // 3. Chamamos o método para contar a frequência das palavras.
+        Map<String, Integer> frequenciaPalavras = contarFrequencia(artigo);
+
+        // 4. Exibimos o resultado da contagem.
+        System.out.println("--- Frequência de Cada Palavra ---");
+        // A interface Map.forEach simplifica a iteração sobre as entradas do mapa.
+        frequenciaPalavras.forEach((palavra, contagem) -> {
+            System.out.println("'" + palavra + "': " + contagem + " vez(es)");
+        });
+        
+        System.out.println();
+        System.out.println("========================================================");
+        System.out.println("                 Análise Concluída");
+        System.out.println("========================================================");
+        System.out.println();
+    }
+
+    /**
+     * Conta a frequência de cada palavra em um texto.
+     *
+     * @param texto O texto a ser analisado.
+     * @return Um Map onde a chave é a palavra e o valor é sua frequência.
+     */
+    public static Map<String, Integer> contarFrequencia(String texto) {
+        // O HashMap armazenará a palavra (chave) e sua contagem (valor).
+        Map<String, Integer> mapaFrequencia = new HashMap<>();
+
+        // 1. Normalização do texto:
+        //    - Converte tudo para minúsculas para não diferenciar "A" de "a".
+        //    - Remove pontuações como pontos e vírgulas para simplificar a análise.
+        String textoNormalizado = texto.toLowerCase().replaceAll("[.,]", "");
+        
+        // 2. Divisão do texto em palavras:
+        //    - O método split("\s+") divide a string por um ou mais espaços em branco.
+        String[] palavras = textoNormalizado.split("\s+");
+
+        // 3. Contagem das palavras:
+        //    - Itera sobre cada palavra no array de palavras.
+        for (String palavra : palavras) {
+            // Ignora strings vazias que podem surgir de múltiplos espaços.
+            if (!palavra.isEmpty()) {
+                // Usa o método getOrDefault para simplificar a lógica:
+                // - Se a palavra já existe no mapa, pega o valor atual.
+                // - Se não existe, usa o valor padrão (0).
+                // Em seguida, adiciona 1 ao valor e atualiza o mapa.
+                mapaFrequencia.put(palavra, mapaFrequencia.getOrDefault(palavra, 0) + 1);
+            }
+        }
+
+        return mapaFrequencia;
+    }
+}
+```
+
+
 ## Exercicio 9 - Mesclar Mapas: 
 
 Em um sistema de inventário, você tem dois registros de produtos e deseja mesclar as informações. Implemente um método para mesclar dois mapas (HashMaps) de produtos, cuidando para tratar possíveis conflitos de chaves. 
 
 Algoritmos de Ordenação: 
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Solução para o Exercício 9 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ *
+ * Descrição: Implemente um método para mesclar dois mapas (HashMaps) de
+ * produtos, cuidando para tratar possíveis conflitos de chaves (somando os
+ * valores).
+ *
+ * "Além da solução padrão solicitada, criarei também uma versão
+ * `Exercicio_9_Dialogo.java` com interface gráfica (JOptionPane) para
+ * demonstrar a aplicação do algoritmo em um contexto com interação visual com o
+ * usuário."
+ *
+ * Autor: Rogério
+ */
+public class Exercicio_9 {
+
+    public static void main(String[] args) {
+        System.out.println(); // Espaçamento inicial no terminal
+
+        // 1. Criação dos inventários das duas lojas.
+        Map<String, Integer> inventarioLojaA = new HashMap<>();
+        inventarioLojaA.put("Maçã", 50);
+        inventarioLojaA.put("Banana", 30);
+        inventarioLojaA.put("Laranja", 25);
+
+        Map<String, Integer> inventarioLojaB = new HashMap<>();
+        inventarioLojaB.put("Banana", 40); // Conflito de chave
+        inventarioLojaB.put("Pera", 20);
+        inventarioLojaB.put("Maçã", 15);   // Conflito de chave
+
+        // 2. Exibição dos inventários originais.
+        System.out.println("========================================================");
+        System.out.println("          Sistema de Consolidação de Inventário");
+        System.out.println("========================================================");
+        System.out.println();
+
+        exibirInventario("Inventário da Loja A", inventarioLojaA);
+        exibirInventario("Inventário da Loja B", inventarioLojaB);
+
+        // 3. Mescla os dois inventários.
+        Map<String, Integer> inventarioConsolidado = mesclarInventarios(inventarioLojaA, inventarioLojaB);
+
+        // 4. Exibição do inventário consolidado.
+        exibirInventario("Inventário Consolidado (Loja A + Loja B)", inventarioConsolidado);
+        
+        System.out.println("========================================================");
+        System.out.println("               Consolidação Concluída");
+        System.out.println("========================================================");
+        System.out.println();
+    }
+
+    /**
+     * Mescla dois mapas de inventário, somando as quantidades em caso de chaves duplicadas.
+     *
+     * @param inventarioA O primeiro inventário.
+     * @param inventarioB O segundo inventário.
+     * @return Um novo mapa contendo o inventário consolidado.
+     */
+    public static Map<String, Integer> mesclarInventarios(Map<String, Integer> inventarioA, Map<String, Integer> inventarioB) {
+        // Cria um novo mapa já com todos os itens do primeiro inventário.
+        Map<String, Integer> inventarioConsolidado = new HashMap<>(inventarioA);
+
+        // Itera sobre o segundo inventário.
+        inventarioB.forEach((produto, quantidade) -> {
+            // O método merge() simplifica a lógica de conflito:
+            // - Se a chave (produto) não existe no mapa consolidado, ela é inserida com sua quantidade.
+            // - Se a chave já existe, a função (Integer::sum) é aplicada aos valores (antigo e novo).
+            inventarioConsolidado.merge(produto, quantidade, Integer::sum);
+        });
+
+        return inventarioConsolidado;
+    }
+
+    /**
+     * Método auxiliar para exibir o conteúdo de um inventário de forma formatada.
+     *
+     * @param titulo O título a ser exibido para o inventário.
+     * @param inventario O mapa do inventário a ser exibido.
+     */
+    private static void exibirInventario(String titulo, Map<String, Integer> inventario) {
+        System.out.println("--------------------------------------------------------");
+        System.out.println("                  " + titulo);
+        System.out.println("--------------------------------------------------------");
+        if (inventario.isEmpty()) {
+            System.out.println("Inventário vazio.");
+        } else {
+            inventario.forEach((produto, quantidade) -> {
+                System.out.printf("- %-10s: %d unidades\n", produto, quantidade);
+            });
+        }
+        System.out.println("--------------------------------------------------------");
+        System.out.println();
+    }
+}
+```
 
 ## Exercicio 10 - Implementação de Algoritmo de Ordenação: 
 
 Imagine que você está desenvolvendo um sistema de classificação que exibe os produtos mais populares em uma loja online. Escolha um algoritmo de ordenação (ex: Bubble Sort, Quick Sort, Merge Sort) e implemente-o para ordenar uma lista de produtos com base nas vendas, de forma decrescente, para que os mais vendidos apareçam primeiro. 
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Solução para o Exercício 10 da Unidade 02 de Algoritmos e Estrutura de Dados.
+ *
+ * Descrição: Implementa um algoritmo de ordenação (Merge Sort) para classificar
+ * uma lista de produtos com base no número de vendas, em ordem decrescente.
+ *
+ * "Além da solução padrão solicitada, criarei também uma versão
+ * `Exercicio_10_Dialogo.java` com interface gráfica (JOptionPane) para
+ * demonstrar a aplicação do algoritmo."
+ *
+ * Autor: Rogério
+ */
+public class Exercicio_10 {
+
+    /**
+     * Classe interna para representar um Produto com nome e número de vendas.
+     */
+    static class Produto {
+        String nome;
+        int vendas;
+
+        public Produto(String nome, int vendas) {
+            this.nome = nome;
+            this.vendas = vendas;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%20s | Vendas: %d", nome, vendas);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(); // Espaçamento inicial
+
+        // 1. Cria uma lista de produtos desordenada.
+        List<Produto> produtos = new ArrayList<>();
+        produtos.add(new Produto("Smart TV 50\"", 120));
+        produtos.add(new Produto("Notebook Gamer", 85));
+        produtos.add(new Produto("Smartphone Pro", 350));
+        produtos.add(new Produto("Cadeira de Escritório", 210));
+        produtos.add(new Produto("Fone Bluetooth", 400));
+        produtos.add(new Produto("Teclado Mecânico", 150));
+
+        System.out.println("========================================================");
+        System.out.println("      Sistema de Classificação de Produtos Populares");
+        System.out.println("========================================================");
+        System.out.println();
+
+        // 2. Exibe a lista original.
+        exibirLista("Lista de Produtos Original (Desordenada)", produtos);
+
+        // 3. Ordena a lista usando Merge Sort.
+        List<Produto> produtosOrdenados = mergeSort(produtos);
+
+        // 4. Exibe a lista ordenada.
+        exibirLista("Produtos Mais Populares (Ordenados por Vendas)", produtosOrdenados);
+
+        System.out.println("========================================================");
+        System.out.println("               Classificação Concluída");
+        System.out.println("========================================================");
+        System.out.println();
+    }
+
+    /**
+     * Ordena uma lista de Produtos usando o algoritmo Merge Sort (recursivo).
+     *
+     * @param lista A lista a ser ordenada.
+     * @return Uma nova lista ordenada em ordem decrescente de vendas.
+     */
+    public static List<Produto> mergeSort(List<Produto> lista) {
+        // Caso base: se a lista tem 1 ou 0 elementos, já está ordenada.
+        if (lista.size() <= 1) {
+            return lista;
+        }
+
+        // Divide a lista em duas metades.
+        int meio = lista.size() / 2;
+        List<Produto> metadeEsquerda = new ArrayList<>(lista.subList(0, meio));
+        List<Produto> metadeDireita = new ArrayList<>(lista.subList(meio, lista.size()));
+
+        // Chama recursivamente o mergeSort para cada metade.
+        metadeEsquerda = mergeSort(metadeEsquerda);
+        metadeDireita = mergeSort(metadeDireita);
+
+        // Combina (merge) as duas metades ordenadas.
+        return merge(metadeEsquerda, metadeDireita);
+    }
+
+    /**
+     * Combina duas listas já ordenadas em uma única lista ordenada.
+     *
+     * @param esquerda Lista da esquerda, já ordenada.
+     * @param direita  Lista da direita, já ordenada.
+     * @return A lista combinada e totalmente ordenada.
+     */
+    private static List<Produto> merge(List<Produto> esquerda, List<Produto> direita) {
+        List<Produto> resultado = new ArrayList<>();
+        int i = 0, j = 0; // Ponteiros para as listas da esquerda e direita
+
+        // Compara os elementos das duas listas e adiciona o maior ao resultado.
+        while (i < esquerda.size() && j < direita.size()) {
+            // Para ordem DECRESCENTE, comparamos se o da esquerda é MAIOR que o da direita.
+            if (esquerda.get(i).vendas >= direita.get(j).vendas) {
+                resultado.add(esquerda.get(i));
+                i++;
+            } else {
+                resultado.add(direita.get(j));
+                j++;
+            }
+        }
+
+        // Adiciona os elementos restantes de qualquer uma das listas (se houver).
+        while (i < esquerda.size()) {
+            resultado.add(esquerda.get(i));
+            i++;
+        }
+        while (j < direita.size()) {
+            resultado.add(direita.get(j));
+            j++;
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Método auxiliar para exibir a lista de produtos de forma formatada.
+     */
+    private static void exibirLista(String titulo, List<Produto> produtos) {
+        System.out.println("--------------------------------------------------------");
+        System.out.println("            " + titulo);
+        System.out.println("--------------------------------------------------------");
+        for (Produto produto : produtos) {
+            System.out.println(produto);
+        }
+        System.out.println("--------------------------------------------------------");
+        System.out.println();
+    }
+}
+```
 
 **Instruções de Entrega**
 
