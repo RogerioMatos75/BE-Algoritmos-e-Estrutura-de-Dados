@@ -1,9 +1,9 @@
 ```java 
 Compilar o código: 
-javac src/Exercicio_10_Dialogo.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
+javac src/Exercicio_1.java  //(isso criará o arquivo Exercicio_1.class dentro da pasta src).
 
 Executar o programa: 
-java -cp src Exercicio_10_Dialogo //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
+java -cp src Exercicio_1 //(o -cp src informa ao Java para procurar o arquivo .class dentro do diretório src).
 ```
 
 Listas (ArrayList): 
