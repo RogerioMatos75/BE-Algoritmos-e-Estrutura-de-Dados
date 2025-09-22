@@ -1,7 +1,7 @@
 ```java 
-javac "src\Exercicio_3.java"
+javac "src\Exercicio_10.java"
 
-java -cp src Exercicio_3
+java -cp src Exercicio_10
 ```
 
 # Árvore Binária e BST (Árvore Binária de Busca) 
@@ -451,6 +451,104 @@ public class Exercicio_3 {
 ## 4 - Busca Binária: 
 
 Imagine que você está desenvolvendo um sistema de pesquisa de dados em uma lista de números ordenados. Implemente um algoritmo de busca binária que encontre a posição de um elemento específico em um array ordenado de inteiros, retornando sua posição ou -1 se não for encontrado. 
+```java
+/**
+ * Solução para o Exercício 4 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Implemente um algoritmo de busca binária que encontre a posição de um
+ * elemento específico em um array ordenado de inteiros, retornando sua posição
+ * ou -1 se não for encontrado.
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.Arrays;
+
+public class Exercicio_4 {
+
+    /**
+     * Imprime um cabeçalho formatado no console.
+     * @param titulo O texto do cabeçalho.
+     */
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    /**
+     * Realiza uma busca binária em um array de inteiros ordenado.
+     * @param array O array ordenado de inteiros onde a busca será realizada.
+     * @param alvo O número a ser buscado.
+     * @return O índice (posição) do alvo, ou -1 se não for encontrado.
+     */
+    public static int buscaBinaria(int[] array, int alvo) {
+        int inicio = 0;
+        int fim = array.length - 1;
+
+        while (inicio <= fim) {
+            int meio = inicio + (fim - inicio) / 2; // Evita overflow para arrays muito grandes
+
+            // Se o alvo está no meio, encontramos
+            if (array[meio] == alvo) {
+                return meio;
+            }
+
+            // Se o alvo é maior, ignora a metade esquerda
+            if (array[meio] < alvo) {
+                inicio = meio + 1;
+            } 
+            // Se o alvo é menor, ignora a metade direita
+            else {
+                fim = meio - 1;
+            }
+        }
+
+        // Se o loop terminar, o alvo não está no array
+        return -1;
+    }
+
+    /**
+     * Método principal para demonstrar a funcionalidade da busca binária.
+     */
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 4: Busca Binária em um Array Ordenado");
+
+        int[] dadosOrdenados = { 2, 5, 8, 12, 16, 23, 38, 56, 72, 91 };
+
+        System.out.println("\nConjunto de dados ordenados: " + Arrays.toString(dadosOrdenados));
+        System.out.println();
+
+        // --- Teste 1: Número que existe no array ---
+        int numeroBuscado1 = 23;
+        System.out.println("Buscando pelo número: " + numeroBuscado1);
+        int posicao1 = buscaBinaria(dadosOrdenados, numeroBuscado1);
+
+        if (posicao1 != -1) {
+            System.out.println("-> Resultado: Número encontrado na posição " + posicao1 + ".");
+        } else {
+            System.out.println("-> Resultado: Número não encontrado no conjunto de dados.");
+        }
+        System.out.println(); // Espaçamento
+
+        // --- Teste 2: Número que NÃO existe no array ---
+        int numeroBuscado2 = 50;
+        System.out.println("Buscando pelo número: " + numeroBuscado2);
+        int posicao2 = buscaBinaria(dadosOrdenados, numeroBuscado2);
+
+        if (posicao2 != -1) {
+            System.out.println("-> Resultado: Número encontrado na posição " + posicao2 + ".");
+        } else {
+            System.out.println("-> Resultado: Número não encontrado no conjunto de dados.");
+        }
+        System.out.println(); // Espaçamento
+    }
+}
+```
 
 ### Grafos, BFS e DFS 
 
@@ -458,14 +556,381 @@ Imagine que você está desenvolvendo um sistema de pesquisa de dados em uma lis
 
 Você está desenvolvendo um sistema de roteamento para um aplicativo de navegação. Crie uma classe que represente um grafo em Java, utilizando lista de adjacências ou matriz de adjacências, para mapear as conexões entre diferentes locais. 
 
+```java
+/**
+ * Solução para o Exercício 5 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Crie uma classe que represente um grafo em Java, utilizando lista
+ * de adjacências, para mapear as conexões entre diferentes locais.
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Exercicio_5 {
+
+    /**
+     * Classe que representa um Grafo utilizando uma Lista de Adjacências.
+     * Os vértices são representados por Strings (nomes dos locais).
+     */
+    static class Grafo {
+        // O mapa armazena a lista de adjacências.
+        // Chave: String (vértice de origem)
+        // Valor: Lista de Strings (vértices de destino)
+        private Map<String, List<String>> listaDeAdjacencias;
+
+        public Grafo() {
+            this.listaDeAdjacencias = new HashMap<>();
+        }
+
+        /**
+         * Adiciona um novo vértice (local) ao grafo.
+         * @param local O nome do local a ser adicionado.
+         */
+        public void adicionarVertice(String local) {
+            // putIfAbsent garante que não vamos substituir uma lista existente.
+            listaDeAdjacencias.putIfAbsent(local, new ArrayList<>());
+        }
+
+        /**
+         * Adiciona uma aresta (conexão) bidirecional entre dois locais.
+         * @param origem O local de origem.
+         * @param destino O local de destino.
+         */
+        public void adicionarAresta(String origem, String destino) {
+            // Garante que ambos os vértices existam no grafo antes de adicionar a aresta.
+            this.adicionarVertice(origem);
+            this.adicionarVertice(destino);
+
+            // Adiciona a conexão de origem para destino
+            listaDeAdjacencias.get(origem).add(destino);
+            // Adiciona a conexão de destino para origem (bidirecional)
+            listaDeAdjacencias.get(destino).add(origem);
+        }
+
+        /**
+         * Imprime a representação do grafo no console.
+         */
+        public void imprimirGrafo() {
+            System.out.println("Representação do Grafo (Lista de Adjacências):");
+            for (String vertice : listaDeAdjacencias.keySet()) {
+                System.out.println(vertice + " -> " + listaDeAdjacencias.get(vertice));
+            }
+        }
+    }
+
+    /**
+     * Imprime um cabeçalho formatado no console.
+     * @param titulo O texto do cabeçalho.
+     */
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    /**
+     * Método principal para demonstrar a representação do grafo.
+     */
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 5: Representação de Grafo com Lista de Adjacências");
+        System.out.println(); // Espaçamento
+
+        Grafo mapaDeNavegacao = new Grafo();
+
+        // Adicionando locais (vértices)
+        mapaDeNavegacao.adicionarVertice("São Paulo");
+        mapaDeNavegacao.adicionarVertice("Rio de Janeiro");
+        mapaDeNavegacao.adicionarVertice("Belo Horizonte");
+        mapaDeNavegacao.adicionarVertice("Curitiba");
+        mapaDeNavegacao.adicionarVertice("Brasília");
+
+        // Adicionando conexões (arestas)
+        mapaDeNavegacao.adicionarAresta("São Paulo", "Rio de Janeiro");
+        mapaDeNavegacao.adicionarAresta("São Paulo", "Curitiba");
+        mapaDeNavegacao.adicionarAresta("São Paulo", "Belo Horizonte");
+        mapaDeNavegacao.adicionarAresta("Rio de Janeiro", "Belo Horizonte");
+        mapaDeNavegacao.adicionarAresta("Belo Horizonte", "Brasília");
+
+        // Imprimindo o grafo para visualização
+        mapaDeNavegacao.imprimirGrafo();
+        System.out.println(); // Espaçamento
+    }
+}
+```
+
 ## 6 - BFS em Grafos: 
 
 No contexto do seu aplicativo de navegação, implemente o algoritmo de Busca em Largura (BFS) para encontrar o caminho mais curto entre dois pontos em um grafo não ponderado, ajudando os usuários a escolherem a melhor rota.
 
+```java
+/**
+ * Solução para o Exercício 6 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Implemente o algoritmo de Busca em Largura (BFS) para encontrar o
+ * caminho mais curto entre dois pontos em um grafo não ponderado.
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.*;
+
+public class Exercicio_6 {
+
+    /**
+     * Classe que representa um Grafo utilizando uma Lista de Adjacências.
+     */
+    static class Grafo {
+        private Map<String, List<String>> listaDeAdjacencias;
+
+        public Grafo() {
+            this.listaDeAdjacencias = new HashMap<>();
+        }
+
+        public void adicionarVertice(String local) {
+            listaDeAdjacencias.putIfAbsent(local, new ArrayList<>());
+        }
+
+        public void adicionarAresta(String origem, String destino) {
+            this.adicionarVertice(origem);
+            this.adicionarVertice(destino);
+            listaDeAdjacencias.get(origem).add(destino);
+            listaDeAdjacencias.get(destino).add(origem);
+        }
+
+        /**
+         * Encontra o caminho mais curto entre dois vértices usando BFS.
+         * @param inicio O vértice de partida.
+         * @param fim O vértice de destino.
+         * @return Uma lista de strings representando o caminho mais curto, ou uma lista vazia se não houver caminho.
+         */
+        public List<String> encontrarCaminhoBFS(String inicio, String fim) {
+            // Fila para os nós a serem visitados
+            Queue<String> fila = new LinkedList<>();
+            // Conjunto para rastrear nós já visitados e evitar ciclos
+            Set<String> visitados = new HashSet<>();
+            // Mapa para reconstruir o caminho de volta (nó -> seu predecessor)
+            Map<String, String> predecessores = new HashMap<>();
+
+            // Validação inicial
+            if (!listaDeAdjacencias.containsKey(inicio) || !listaDeAdjacencias.containsKey(fim)) {
+                return Collections.emptyList(); // Retorna lista vazia se início ou fim não existem
+            }
+
+            // Começa a busca pelo nó inicial
+            fila.add(inicio);
+            visitados.add(inicio);
+
+            while (!fila.isEmpty()) {
+                String atual = fila.poll();
+
+                // Se encontramos o destino, podemos parar a busca
+                if (atual.equals(fim)) {
+                    break;
+                }
+
+                // Itera sobre todos os vizinhos do nó atual
+                for (String vizinho : listaDeAdjacencias.get(atual)) {
+                    if (!visitados.contains(vizinho)) {
+                        visitados.add(vizinho);
+                        predecessores.put(vizinho, atual); // Guarda o caminho
+                        fila.add(vizinho);
+                    }
+                }
+            }
+
+            // Se o mapa de predecessores não contém o fim, não há caminho
+            if (!predecessores.containsKey(fim) && !inicio.equals(fim)) {
+                 return Collections.emptyList();
+            }
+
+            // Reconstrói o caminho do fim para o início
+            List<String> caminho = new LinkedList<>();
+            String passo = fim;
+            while (passo != null) {
+                caminho.add(0, passo); // Adiciona no início da lista
+                passo = predecessores.get(passo);
+            }
+            
+            // Se o caminho encontrado não começa com o 'inicio', algo deu errado (não deveria acontecer se há caminho)
+            if (!caminho.isEmpty() && caminho.get(0).equals(inicio)) {
+                return caminho;
+            } else {
+                return Collections.emptyList();
+            }
+        }
+    }
+
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 6: BFS para Encontrar o Caminho Mais Curto");
+        System.out.println();
+
+        Grafo mapa = new Grafo();
+        mapa.adicionarAresta("São Paulo", "Rio de Janeiro");
+        mapa.adicionarAresta("São Paulo", "Curitiba");
+        mapa.adicionarAresta("São Paulo", "Belo Horizonte");
+        mapa.adicionarAresta("Rio de Janeiro", "Belo Horizonte");
+        mapa.adicionarAresta("Belo Horizonte", "Brasília");
+        mapa.adicionarAresta("Curitiba", "Porto Alegre"); // Adicionando mais um nível
+
+        String inicio = "São Paulo";
+        String fim = "Brasília";
+
+        System.out.println("Buscando o caminho mais curto de " + inicio + " para " + fim + "...");
+        List<String> caminho = mapa.encontrarCaminhoBFS(inicio, fim);
+
+        if (caminho.isEmpty()) {
+            System.out.println("Não foi encontrado um caminho.");
+        } else {
+            System.out.println("-> Caminho mais curto encontrado: " + String.join(" -> ", caminho));
+        }
+        
+        System.out.println();
+
+        // Teste 2: De Curitiba para Brasília
+        inicio = "Curitiba";
+        System.out.println("Buscando o caminho mais curto de " + inicio + " para " + fim + "...");
+        caminho = mapa.encontrarCaminhoBFS(inicio, fim);
+
+        if (caminho.isEmpty()) {
+            System.out.println("Não foi encontrado um caminho.");
+        } else {
+            System.out.println("-> Caminho mais curto encontrado: " + String.join(" -> ", caminho));
+        }
+
+        System.out.println();
+    }
+}
+```
 
 ## 7 - DFS em Grafos: 
 
 Continuando no seu aplicativo de navegação, escreva um método para realizar a Busca em Profundidade (DFS) em um grafo. Esse método deve exibir todos os vértices visitados, permitindo que os usuários visualizem as possíveis rotas de maneira mais detalhada. 
+
+```java
+/**
+ * Solução para o Exercício 7 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Escreva um método para realizar a Busca em Profundidade (DFS) em um
+ * grafo. Esse método deve exibir todos os vértices visitados.
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.*;
+
+public class Exercicio_7 {
+
+    /**
+     * Classe que representa um Grafo utilizando uma Lista de Adjacências.
+     */
+    static class Grafo {
+        private Map<String, List<String>> listaDeAdjacencias;
+
+        public Grafo() {
+            this.listaDeAdjacencias = new HashMap<>();
+        }
+
+        public void adicionarVertice(String local) {
+            listaDeAdjacencias.putIfAbsent(local, new ArrayList<>());
+        }
+
+        public void adicionarAresta(String origem, String destino) {
+            this.adicionarVertice(origem);
+            this.adicionarVertice(destino);
+            listaDeAdjacencias.get(origem).add(destino);
+            listaDeAdjacencias.get(destino).add(origem);
+        }
+
+        /**
+         * Inicia o percurso DFS a partir de um vértice inicial.
+         * @param inicio O vértice de onde o percurso deve começar.
+         * @return Uma lista com a ordem dos vértices visitados.
+         */
+        public List<String> percursoDFS(String inicio) {
+            List<String> resultado = new ArrayList<>();
+            Set<String> visitados = new HashSet<>();
+            
+            // Validação para garantir que o nó de início existe
+            if (!listaDeAdjacencias.containsKey(inicio)) {
+                return resultado; // Retorna lista vazia
+            }
+
+            dfsRecursivo(inicio, visitados, resultado);
+            return resultado;
+        }
+
+        /**
+         * Método auxiliar recursivo que executa a lógica do DFS.
+         * @param atual O vértice atual sendo visitado.
+         * @param visitados O conjunto de vértices já visitados.
+         * @param resultado A lista para armazenar a ordem da visitação.
+         */
+        private void dfsRecursivo(String atual, Set<String> visitados, List<String> resultado) {
+            // 1. Marca o nó atual como visitado e o adiciona ao resultado
+            visitados.add(atual);
+            resultado.add(atual);
+
+            // 2. Para cada vizinho do nó atual...
+            for (String vizinho : listaDeAdjacencias.get(atual)) {
+                // 3. ...se o vizinho ainda não foi visitado, chama a recursão para ele.
+                if (!visitados.contains(vizinho)) {
+                    dfsRecursivo(vizinho, visitados, resultado);
+                }
+            }
+        }
+    }
+
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 7: Percurso em Profundidade (DFS) em um Grafo");
+        System.out.println();
+
+        Grafo mapa = new Grafo();
+        mapa.adicionarAresta("São Paulo", "Rio de Janeiro");
+        mapa.adicionarAresta("São Paulo", "Curitiba");
+        mapa.adicionarAresta("São Paulo", "Belo Horizonte");
+        mapa.adicionarAresta("Rio de Janeiro", "Belo Horizonte");
+        mapa.adicionarAresta("Belo Horizonte", "Brasília");
+        mapa.adicionarAresta("Curitiba", "Porto Alegre");
+
+        String pontoDePartida = "São Paulo";
+        System.out.println("Iniciando a busca em profundidade a partir de: " + pontoDePartida);
+        System.out.println();
+
+        List<String> ordemDeVisita = mapa.percursoDFS(pontoDePartida);
+
+        System.out.println("Ordem de visitação dos locais (DFS):");
+        System.out.println("-> " + String.join(" -> ", ordemDeVisita));
+        System.out.println();
+    }
+}
+```
 
 ### Aplicações e Desafios Combinados 
 
@@ -474,12 +939,426 @@ Continuando no seu aplicativo de navegação, escreva um método para realizar a
 
 Imagine que você está analisando uma árvore binária de busca para identificar o produto mais barato de uma lista. Escreva um método que encontre o menor valor em uma árvore binária de busca, ajudando a determinar a melhor oferta disponível. 
 
+```java
+/**
+ * Solução para o Exercício 8 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Escreva um método que encontre o menor valor em uma árvore binária
+ * de busca (BST).
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.NoSuchElementException;
+
+public class Exercicio_8 {
+
+    /**
+     * Classe aninhada para representar o Nó da árvore.
+     */
+    static class No {
+        int valor; // Representando o preço de um produto
+        No esquerda, direita;
+
+        public No(int valor) {
+            this.valor = valor;
+            this.esquerda = null;
+            this.direita = null;
+        }
+    }
+
+    /**
+     * Classe que implementa a Árvore Binária de Busca.
+     */
+    static class ArvoreBinariaBusca {
+        private No raiz;
+
+        public ArvoreBinariaBusca() {
+            this.raiz = null;
+        }
+
+        /**
+         * Insere um novo valor na BST.
+         * @param valor O valor a ser inserido.
+         */
+        public void inserir(int valor) {
+            raiz = inserirRecursivo(raiz, valor);
+        }
+
+        private No inserirRecursivo(No atual, int valor) {
+            if (atual == null) {
+                return new No(valor);
+            }
+
+            if (valor < atual.valor) {
+                atual.esquerda = inserirRecursivo(atual.esquerda, valor);
+            } else if (valor > atual.valor) {
+                atual.direita = inserirRecursivo(atual.direita, valor);
+            }
+
+            return atual; // Retorna o nó (inalterado)
+        }
+
+        /**
+         * Encontra o menor valor na árvore (método iterativo).
+         * @return O menor valor encontrado.
+         * @throws NoSuchElementException se a árvore estiver vazia.
+         */
+        public int encontrarMinimo() {
+            if (raiz == null) {
+                throw new NoSuchElementException("A árvore está vazia. Não há valor mínimo.");
+            }
+
+            No atual = raiz;
+            // Navega para a esquerda até não poder mais
+            while (atual.esquerda != null) {
+                atual = atual.esquerda;
+            }
+            return atual.valor;
+        }
+    }
+
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 8: Encontrar o Valor Mínimo em uma BST");
+        System.out.println();
+
+        ArvoreBinariaBusca arvoreDeProdutos = new ArvoreBinariaBusca();
+
+        // Inserindo preços de produtos na árvore
+        System.out.println("Inserindo preços na árvore de produtos: 150, 80, 220, 60, 120, 200, 300, 40");
+        arvoreDeProdutos.inserir(150); // Raiz
+        arvoreDeProdutos.inserir(80);
+        arvoreDeProdutos.inserir(220);
+        arvoreDeProdutos.inserir(60);
+        arvoreDeProdutos.inserir(120);
+        arvoreDeProdutos.inserir(200);
+        arvoreDeProdutos.inserir(300);
+        arvoreDeProdutos.inserir(40); // O menor valor
+        System.out.println();
+
+        try {
+            int produtoMaisBarato = arvoreDeProdutos.encontrarMinimo();
+            System.out.println("Analisando a árvore para encontrar a melhor oferta...");
+            System.out.println("-> O produto mais barato custa: R$ " + produtoMaisBarato);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println();
+
+        // Teste com árvore vazia
+        System.out.println("Testando com uma árvore vazia...");
+        ArvoreBinariaBusca arvoreVazia = new ArvoreBinariaBusca();
+        try {
+            arvoreVazia.encontrarMinimo();
+        } catch (NoSuchElementException e) {
+            System.out.println("-> Resultado: " + e.getMessage());
+        }
+        System.out.println();
+    }
+}
+```
 
 ## 9 - Caminho Mais Curto em Grafo Ponderado: 
 
 Ao modificar seu algoritmo BFS, você precisa encontrar o caminho mais curto entre dois pontos em um grafo ponderado, considerando as distâncias. Esse ajuste é crucial para garantir que os usuários recebam as rotas mais eficientes. 
+```java
+/**
+ * Solução para o Exercício 9 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Encontre o caminho mais curto entre dois pontos em um grafo ponderado
+ * utilizando o Algoritmo de Dijkstra.
+ * 
+ * Autor: Rogério
+ */
 
+import java.util.*;
+
+public class Exercicio_9 {
+
+    /**
+     * Classe auxiliar para representar um vizinho na lista de adjacências.
+     * Armazena o nome do vértice de destino e a distância (peso) da aresta.
+     */
+    static class Vizinho {
+        String nome;
+        int distancia;
+
+        Vizinho(String nome, int distancia) {
+            this.nome = nome;
+            this.distancia = distancia;
+        }
+
+        @Override
+        public String toString() {
+            return nome + "(" + distancia + ")";
+        }
+    }
+
+    /**
+     * Classe que representa um Grafo PONDERADO utilizando uma Lista de Adjacências.
+     */
+    static class GrafoPonderado {
+        private final Map<String, List<Vizinho>> listaDeAdjacencias = new HashMap<>();
+
+        public void adicionarVertice(String local) {
+            listaDeAdjacencias.putIfAbsent(local, new ArrayList<>());
+        }
+
+        public void adicionarAresta(String origem, String destino, int distancia) {
+            this.adicionarVertice(origem);
+            this.adicionarVertice(destino);
+            // Adiciona a aresta nos dois sentidos (grafo não-direcionado)
+            listaDeAdjacencias.get(origem).add(new Vizinho(destino, distancia));
+            listaDeAdjacencias.get(destino).add(new Vizinho(origem, distancia));
+        }
+
+        /**
+         * Encontra o caminho mais curto usando o Algoritmo de Dijkstra.
+         * @param inicio O vértice de partida.
+         * @param fim O vértice de destino.
+         * @return Um Map contendo o caminho (lista de locais) e a distância total.
+         */
+        public Map<String, Object> encontrarCaminhoMaisCurto(String inicio, String fim) {
+            // Mapa para armazenar a menor distância encontrada do início até cada vértice
+            Map<String, Integer> distancias = new HashMap<>();
+            // Fila de prioridade para decidir qual vértice visitar em seguida (o com menor distância)
+            PriorityQueue<Vizinho> filaDePrioridade = new PriorityQueue<>(Comparator.comparingInt(v -> v.distancia));
+            // Mapa para reconstruir o caminho no final
+            Map<String, String> predecessores = new HashMap<>();
+            // Conjunto para não reprocessar vértices
+            Set<String> visitados = new HashSet<>();
+
+            // Inicializa todas as distâncias como infinito, exceto a do início
+            for (String vertice : listaDeAdjacencias.keySet()) {
+                distancias.put(vertice, Integer.MAX_VALUE);
+            }
+            distancias.put(inicio, 0);
+
+            // Começa pela origem
+            filaDePrioridade.add(new Vizinho(inicio, 0));
+
+            while (!filaDePrioridade.isEmpty()) {
+                Vizinho atual = filaDePrioridade.poll();
+                String verticeAtual = atual.nome;
+
+                if (visitados.contains(verticeAtual)) continue;
+                visitados.add(verticeAtual);
+
+                if (verticeAtual.equals(fim)) break; // Otimização: parar se já chegamos ao destino
+
+                for (Vizinho vizinho : listaDeAdjacencias.get(verticeAtual)) {
+                    int novaDistancia = distancias.get(verticeAtual) + vizinho.distancia;
+                    if (novaDistancia < distancias.get(vizinho.nome)) {
+                        distancias.put(vizinho.nome, novaDistancia);
+                        predecessores.put(vizinho.nome, verticeAtual);
+                        filaDePrioridade.add(new Vizinho(vizinho.nome, novaDistancia));
+                    }
+                }
+            }
+
+            // Reconstrói o caminho
+            List<String> caminho = new LinkedList<>();
+            String passo = fim;
+            if (predecessores.containsKey(passo) || passo.equals(inicio)) {
+                while (passo != null) {
+                    caminho.add(0, passo);
+                    passo = predecessores.get(passo);
+                }
+            }
+
+            Map<String, Object> resultado = new HashMap<>();
+            resultado.put("caminho", caminho);
+            resultado.put("distancia", distancias.get(fim));
+            return resultado;
+        }
+    }
+
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 9: Dijkstra para Caminho Mais Curto em Grafo Ponderado");
+        System.out.println();
+
+        GrafoPonderado mapa = new GrafoPonderado();
+        mapa.adicionarAresta("São Paulo", "Rio de Janeiro", 430);
+        mapa.adicionarAresta("São Paulo", "Curitiba", 408);
+        mapa.adicionarAresta("São Paulo", "Belo Horizonte", 586);
+        mapa.adicionarAresta("Rio de Janeiro", "Belo Horizonte", 440);
+        mapa.adicionarAresta("Belo Horizonte", "Brasília", 740);
+        mapa.adicionarAresta("Curitiba", "Porto Alegre", 710);
+
+        String inicio = "São Paulo";
+        String fim = "Brasília";
+
+        System.out.println("Buscando a rota mais eficiente de " + inicio + " para " + fim + "...");
+        Map<String, Object> resultado = mapa.encontrarCaminhoMaisCurto(inicio, fim);
+        List<String> caminho = (List<String>) resultado.get("caminho");
+        int distancia = (int) resultado.get("distancia");
+
+        if (caminho.isEmpty() || distancia == Integer.MAX_VALUE) {
+            System.out.println("Não foi encontrado um caminho.");
+        } else {
+            System.out.println("-> Rota mais curta: " + String.join(" -> ", caminho));
+            System.out.println("-> Distância total: " + distancia + " km");
+        }
+        System.out.println();
+    }
+}
+```
 
 ## 10 - Ordenação de Grafos: 
 
 Por fim, implemente um algoritmo que ordene os vértices de um grafo de acordo com a topologia das conexões entre eles. Essa ordenação pode ser útil em diversas aplicações, como planejamento de projetos ou organização de tarefas interdependentes. 
+
+```java
+/**
+ * Solução para o Exercício 10 da Unidade 03 de Algoritmos e Estrutura de Dados.
+ * 
+ * Descrição: Implemente um algoritmo que ordene os vértices de um grafo de acordo
+ * com a topologia (Ordenação Topológica), útil para organizar tarefas interdependentes.
+ * 
+ * Autor: Rogério
+ */
+
+import java.util.*;
+
+public class Exercicio_10 {
+
+    /**
+     * Classe que representa um Grafo Direcionado.
+     */
+    static class GrafoDirecionado {
+        private final Map<String, List<String>> listaDeAdjacencias = new HashMap<>();
+        private final Map<String, Integer> inDegree = new HashMap<>();
+
+        /**
+         * Adiciona um vértice ao grafo. Necessário para vértices que não têm arestas.
+         */
+        public void adicionarVertice(String vertice) {
+            listaDeAdjacencias.putIfAbsent(vertice, new ArrayList<>());
+            inDegree.putIfAbsent(vertice, 0);
+        }
+
+        /**
+         * Adiciona uma aresta direcionada (dependência) de origem para destino.
+         * @param origem A tarefa que deve ser feita primeiro.
+         * @param destino A tarefa que depende da origem.
+         */
+        public void adicionarAresta(String origem, String destino) {
+            this.adicionarVertice(origem);
+            this.adicionarVertice(destino);
+
+            listaDeAdjacencias.get(origem).add(destino);
+            inDegree.put(destino, inDegree.get(destino) + 1);
+        }
+
+        /**
+         * Realiza a ordenação topológica do grafo usando o Algoritmo de Kahn.
+         * @return Uma lista com os vértices em ordem topológica, ou uma lista vazia se houver um ciclo.
+         */
+        public List<String> ordenacaoTopologica() {
+            // Fila para vértices com in-degree zero (sem dependências)
+            Queue<String> fila = new LinkedList<>();
+            for (Map.Entry<String, Integer> entry : inDegree.entrySet()) {
+                if (entry.getValue() == 0) {
+                    fila.add(entry.getKey());
+                }
+            }
+
+            List<String> ordemTopologica = new ArrayList<>();
+            int verticesProcessados = 0;
+
+            while (!fila.isEmpty()) {
+                String u = fila.poll();
+                ordemTopologica.add(u);
+                verticesProcessados++;
+
+                // Para cada vizinho de u, "removemos" a aresta
+                for (String v : listaDeAdjacencias.get(u)) {
+                    inDegree.put(v, inDegree.get(v) - 1);
+                    // Se o vizinho ficou sem dependências, adiciona à fila
+                    if (inDegree.get(v) == 0) {
+                        fila.add(v);
+                    }
+                }
+            }
+
+            // Se o número de vértices processados for menor que o total, há um ciclo.
+            if (verticesProcessados != listaDeAdjacencias.size()) {
+                System.out.println("Alerta: O grafo contém um ciclo! Ordenação topológica não é possível.");
+                return new ArrayList<>(); // Retorna lista vazia para indicar falha
+            }
+
+            return ordemTopologica;
+        }
+    }
+
+    public static void imprimirCabecalho(String titulo) {
+        int largura = 80;
+        String linha = "=".repeat(largura);
+        int padding = Math.max(0, (largura - titulo.length()) / 2);
+        System.out.println(linha);
+        System.out.println(" ".repeat(padding) + titulo);
+        System.out.println(linha);
+    }
+
+    public static void main(String[] args) {
+        imprimirCabecalho("Exercício 10: Ordenação Topológica com Algoritmo de Kahn");
+        System.out.println();
+
+        GrafoDirecionado projeto = new GrafoDirecionado();
+        System.out.println("Definindo as dependências das tarefas do projeto...");
+
+        // Exemplo: Tarefas para se vestir de manhã
+        projeto.adicionarAresta("Vestir meias", "Vestir sapatos");
+        projeto.adicionarAresta("Vestir cueca", "Vestir calça");
+        projeto.adicionarAresta("Vestir calça", "Colocar cinto");
+        projeto.adicionarAresta("Vestir camisa", "Vestir casaco");
+        projeto.adicionarAresta("Colocar cinto", "Vestir casaco");
+        
+        // Tarefa sem dependência explícita (mas é um ponto de partida)
+        projeto.adicionarVertice("Vestir camisa");
+
+        System.out.println();
+        System.out.println("Calculando a ordem de execução das tarefas...");
+        List<String> ordem = projeto.ordenacaoTopologica();
+
+        if (!ordem.isEmpty()) {
+            System.out.println("-> Ordem de execução recomendada: " + String.join(" -> ", ordem));
+        }
+        System.out.println();
+
+        // Exemplo com ciclo
+        System.out.println("===============================================================================");
+        System.out.println("Testando um grafo com um ciclo de dependências...");
+        GrafoDirecionado projetoCiclico = new GrafoDirecionado();
+        projetoCiclico.adicionarAresta("Tarefa A", "Tarefa B");
+        projetoCiclico.adicionarAresta("Tarefa B", "Tarefa C");
+        projetoCiclico.adicionarAresta("Tarefa C", "Tarefa A"); // Ciclo
+
+        List<String> ordemCiclica = projetoCiclico.ordenacaoTopologica();
+        if (ordemCiclica.isEmpty()) {
+            System.out.println("-> O algoritmo detectou corretamente o ciclo e não pôde gerar uma ordem.");
+        }
+        System.out.println();
+    }
+}
+```
+
