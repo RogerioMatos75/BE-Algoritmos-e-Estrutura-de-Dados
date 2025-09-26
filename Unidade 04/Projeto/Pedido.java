@@ -15,4 +15,27 @@ public class Pedido {
         this.valorTotal = valorTotal;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public List<Pizza> getPizzas() {
+        return pizzas;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setPizzas(List<Pizza> pizzas) {
+        this.pizzas = pizzas;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
 }
