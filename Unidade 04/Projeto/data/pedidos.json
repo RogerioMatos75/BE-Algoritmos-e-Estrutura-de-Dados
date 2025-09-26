@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "cliente": {
+      "nome": "Maria de Fatima",
+      "endereco": "Rua Victorio",
+      "telefone": "119322226060",
+      "email": "fatimamiguel@gmail.com"
+    },
+    "pizzas": [
+      {
+        "sabores": [
+          "Portuguesa",
+          "Frango com Catupiry"
+        ],
+        "preco": 34.95,
+        "tamanho": "GRANDE"
+      }
+    ],
+    "valorTotal": 34.95
+  },
+  {
+    "id": 2,
+    "cliente": {
+      "nome": "Matheus Silva",
+      "endereco": "Rua das Mansoes",
+      "telefone": "6276543987",
+      "email": "matheusmatos@gmail.com"
+    },
+    "pizzas": [
+      {
+        "sabores": [
+          "Calabresa"
+        ],
+        "preco": 33.0,
+        "tamanho": "BROTO"
+      }
+    ],
+    "valorTotal": 33.0
+  },
+  {
+    "id": 3,
+    "cliente": {
+      "nome": "Admin",
+      "endereco": "Rua Principal, 0",
+      "telefone": "00000000000",
+      "email": "admin@pizzaria.com"
+    },
+    "pizzas": [
+      {
+        "sabores": [
+          "Frango com Catupiry"
+        ],
+        "preco": 36.5,
+        "tamanho": "GIGA"
+      },
+      {
+        "sabores": [
+          "Quatro queijos",
+          "Margherita",
+          "Atum",
+          "Portuguesa"
+        ],
+        "preco": 34.775,
+        "tamanho": "GRANDE"
+      }
+    ],
+    "valorTotal": 71.275
+  }
+]

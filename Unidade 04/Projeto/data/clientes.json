@@ -1,0 +1,20 @@
+[
+  {
+    "nome": "Admin",
+    "endereco": "Rua Principal, 0",
+    "telefone": "00000000000",
+    "email": "admin@pizzaria.com"
+  },
+  {
+    "nome": "Maria de Fatima",
+    "endereco": "Rua Victorio",
+    "telefone": "119322226060",
+    "email": "fatimamiguel@gmail.com"
+  },
+  {
+    "nome": "Matheus Silva",
+    "endereco": "Rua das Mansoes",
+    "telefone": "6276543987",
+    "email": "matheusmatos@gmail.com"
+  }
+]

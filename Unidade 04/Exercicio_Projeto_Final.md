@@ -40,13 +40,6 @@ Instruções de Entrega
 
 ## Plano de Implementação (README do Projeto)
 
-### Comandos
-
-```java
-javac Projeto/*.java && java Projeto.Pizzaria
-```
-
-
 Este documento servirá como um guia para as melhorias a serem implementadas no projeto da Pizzaria. Toda a interação com o usuário será feita através de interfaces gráficas com **JOptionPane**.
 
 ### 1. Método Alterar Pedido
@@ -60,34 +53,35 @@ Este documento servirá como um guia para as melhorias a serem implementadas no 
     - O valor total do pedido é recalculado e atualizado dinamicamente após cada alteração.
     - A classe `Pedido.java` foi aprimorada com métodos `getters` e `setters` para permitir a manipulação de seus dados.
 
-*Melhoria no Codigo*
-
-  E você fez uma observação excelente e muito importante sobre a usabilidade. Você está absolutamente certo. Ao escolher a opção
-   "Alterar Pedido" e buscar por ID, o programa atualmente pede para você digitar um ID "no escuro", sem mostrar quais são os
-  pedidos existentes. Isso é uma falha na experiência do usuário.
-
-  A solução ideal, que podemos implementar, é: antes de pedir o ID, o sistema deveria primeiro exibir uma lista simples de todos
-   os pedidos atuais. Algo como:
-
-  `
-  Pedidos Atuais:
-  - ID: 1, Cliente: Rogerio, Valor: R$ 32.50
-  - ID: 2, Cliente: Ana, Valor: R$ 45.00
-  `
-
-  Dessa forma, você saberia exatamente qual ID digitar.
-    Vou adicionar essa funcionalidade no código. Assim, quando você escolher "Alterar Pedido", o sistema primeiro mostrará todos os pedidos existentes com seus IDs, e só depois pedirá para você digitar o ID do pedido que deseja alterar.
-    Isso tornará a experiência muito mais amigável e intuitiva. Obrigado por apontar isso!
-
 ### 2. Método Gerar Relatório
-- **O que será feito:**
-    - Calcular e exibir o faturamento total de todos os pedidos.
-    - Identificar e listar os sabores de pizza mais pedidos (ranking de popularidade).
-    - Mapear e exibir as conexões entre sabores que são frequentemente pedidos juntos, utilizando uma estrutura de dados de grafo.
+- **O que foi implementado:**
+    - A lógica de geração de relatórios foi encapsulada em uma nova classe de serviço, `Relatorio.java`, promovendo uma arquitetura limpa e a separação de responsabilidades.
+    - O faturamento total é calculado somando o valor de todos os pedidos registrados.
+    - Foi implementado um sistema de ranking que conta a ocorrência de cada sabor de pizza e os exibe em ordem de popularidade.
+    - Para atender ao requisito de grafos, foi utilizada uma estrutura de dados (`Map` aninhado) para mapear as conexões entre sabores que são pedidos juntos na mesma pizza, registrando a frequência de cada par.
+    - O relatório final, contendo todas essas informações, é apresentado ao usuário de forma clara e organizada em uma janela de diálogo (`JOptionPane`) com barra de rolagem, garantindo uma boa visualização.
 
 ### 3. Método para Cálculo de Frete
 - **O que será feito:**
     - Criar uma função que calcula o valor do frete com base na **distância (km)** e na **quantidade de pizzas**.
     - Integrar este cálculo ao final da criação de um novo pedido.
     - O valor do frete será somado ao total do pedido.
- 
+
+---
+
+### Melhoria Adicional: Persistência de Dados com JSON
+- **O que foi implementado:**
+    - Para resolver a perda de dados a cada reinicialização do programa, foi implementado um sistema de persistência de dados utilizando arquivos JSON.
+    - Foi adicionada a biblioteca **Gson** da Google ao projeto, uma solução robusta e padrão de mercado para serialização/desserialização de objetos Java.
+    - A lógica de manipulação de arquivos foi centralizada em uma nova classe `DataManager.java`, responsável por salvar e carregar as listas de clientes e pedidos.
+    - O fluxo da aplicação em `Pizzaria.java` foi modificado para:
+        - **Carregar** todos os dados dos arquivos `clientes.json` e `pedidos.json` ao iniciar.
+        - **Salvar** o estado atual das listas de volta para os arquivos JSON quando o usuário fecha a aplicação.
+    - Os arquivos de dados são armazenados em um novo diretório `Projeto/data/` para manter o projeto organizado.
+    - Os comandos de compilação e execução foram atualizados para incluir a biblioteca Gson no classpath:
+      ```shell
+      # Compilar
+      javac -cp ".;Projeto/lib/gson-2.10.1.jar" Projeto/*.java
+      # Executar
+      java -cp ".;Projeto/lib/gson-2.10.1.jar" Projeto.Pizzaria
+      ```

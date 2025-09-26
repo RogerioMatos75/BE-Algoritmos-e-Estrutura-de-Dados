@@ -10,19 +10,16 @@ import Projeto.Pizza.TamanhoPizza;
 
 public class Pizzaria {
     public static void main(String[] args) {
-        List<Cliente> listaClientes = new ArrayList<>();
-        List<Pedido> listaPedidos = new ArrayList<>();
+        // Carrega os dados dos arquivos JSON ao iniciar
+        List<Cliente> listaClientes = DataManager.carregarClientes();
+        List<Pedido> listaPedidos = DataManager.carregarPedidos();
 
-        // Dados de exemplo para teste
-        Cliente clienteTeste = new Cliente("Rogerio", "Rua Teste, 123", "11999998888", "rogerio@teste.com");
-        listaClientes.add(clienteTeste);
-        List<Pizza> pizzasTeste = new ArrayList<>();
-        List<String> saboresTeste = new ArrayList<>();
-        saboresTeste.add("Pepperoni");
-        saboresTeste.add("Mussarela");
-        pizzasTeste.add(new Pizza(saboresTeste, 32.50, TamanhoPizza.GRANDE));
-        Pedido pedidoTeste = new Pedido(1, clienteTeste, pizzasTeste, 32.50);
-        listaPedidos.add(pedidoTeste);
+        // Se não houver dados de clientes, adiciona um de exemplo para começar
+        if (listaClientes.isEmpty()) {
+            Cliente clienteTeste = new Cliente("Admin", "Rua Principal, 0", "00000000000", "admin@pizzaria.com");
+            listaClientes.add(clienteTeste);
+            JOptionPane.showMessageDialog(null, "Bem-vindo! Como não havia dados, um cliente 'Admin' foi criado para você começar.");
+        }
 
         boolean continuar = true;
         while (continuar) {
@@ -59,13 +56,15 @@ public class Pizzaria {
                         }
                         break;
                     case 4:
-                        gerarRelatorio();
+                        gerarRelatorio(listaPedidos);
                         break;
                     case 5:
                         gerarListaClientes(listaClientes);
                         break;
                     case 9:
-                        JOptionPane.showMessageDialog(null, "Até amanhã...");
+                        // Salva os dados antes de sair
+                        DataManager.salvarDados(listaClientes, listaPedidos);
+                        JOptionPane.showMessageDialog(null, "Dados salvos com sucesso! Até amanhã...");
                         continuar = false;
                         break;
                     default:
@@ -149,6 +148,26 @@ public class Pizzaria {
                                                     null, opcoesBusca, opcoesBusca[0]);
 
         if (tipoBusca == -1) return;
+
+        // Bloco de melhoria: Exibir pedidos antes de solicitar o ID
+        if (tipoBusca == 0) { // Se a busca for por ID
+            StringBuilder sb = new StringBuilder("--- Pedidos Atuais ---\n\n");
+            for (Pedido p : listaPedidos) {
+                sb.append("ID: ").append(p.getId())
+                  .append(", Cliente: ").append(p.getCliente().getNome())
+                  .append(", Valor: R$").append(String.format("%.2f", p.getValorTotal()))
+                  .append("\n");
+            }
+            sb.append("\n--------------------------\n");
+
+            JTextArea textArea = new JTextArea(sb.toString());
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setEditable(false);
+            scrollPane.setPreferredSize(new java.awt.Dimension(400, 200));
+            JOptionPane.showMessageDialog(null, scrollPane, "Lista de Pedidos", JOptionPane.INFORMATION_MESSAGE);
+        }
 
         String valorBusca = JOptionPane.showInputDialog("Digite o " + opcoesBusca[tipoBusca] + ":");
         if (valorBusca == null || valorBusca.trim().isEmpty()) return;
@@ -299,8 +318,22 @@ public class Pizzaria {
         return new Cliente(nome, endereco, telefone, email);
     }
 
-    private static void gerarRelatorio() {
-        System.out.println("Gerar relatorio (NECESSITA IMPLEMENTAÇÃO)");
+    private static void gerarRelatorio(List<Pedido> listaPedidos) {
+        if (listaPedidos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há pedidos para gerar um relatório.", "Relatório de Vendas", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        Relatorio relatorio = new Relatorio(listaPedidos);
+        String relatorioConteudo = relatorio.gerar();
+
+        JTextArea textArea = new JTextArea(relatorioConteudo);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        scrollPane.setPreferredSize(new java.awt.Dimension(500, 400));
+        JOptionPane.showMessageDialog(null, scrollPane, "Relatório de Vendas", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void gerarListaClientes(List<Cliente> listaClientes) {
