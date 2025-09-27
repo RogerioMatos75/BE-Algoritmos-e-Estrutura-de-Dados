@@ -118,9 +118,54 @@ public class Pizzaria {
 
         // 3. Finalizar Pedido
         if (!pizzasDoPedido.isEmpty()) {
-            double valorTotal = somarPizzas(pizzasDoPedido);
-            int novoId = listaPedidos.size() + 1;
-            Pedido novoPedido = new Pedido(novoId, clienteSelecionado, pizzasDoPedido, valorTotal);
+            double valorPizzas = somarPizzas(pizzasDoPedido);
+            
+            // --- Início da Lógica de Frete (com validação) ---
+            double valorFrete = 0;
+            int confirmaFrete = JOptionPane.showConfirmDialog(null, "Deseja incluir entrega (cálculo de frete)?", "Entrega", JOptionPane.YES_NO_OPTION);
+            if (confirmaFrete == JOptionPane.YES_OPTION) {
+                double distancia = -1;
+                while (distancia < 0) {
+                    String distanciaInput = JOptionPane.showInputDialog(null, "Digite a distância em km (apenas números, ex: 2,5):", "Cálculo de Frete", JOptionPane.QUESTION_MESSAGE);
+
+                    if (distanciaInput == null) { // Usuário cancelou
+                        distancia = -2; // Valor especial para sair do loop
+                        valorFrete = 0;
+                        JOptionPane.showMessageDialog(null, "Cálculo de frete cancelado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    }
+
+                    try {
+                        // Limpa a entrada do usuário para extrair apenas os números
+                        String entradaLimpa = distanciaInput.trim()
+                                                            .toLowerCase()
+                                                            .replace("quilometros", "")
+                                                            .replace("quilometro", "")
+                                                            .replace("km", "")
+                                                            .replace(',', '.');
+                        
+                        distancia = Double.parseDouble(entradaLimpa);
+
+                        if (distancia < 0) {
+                            JOptionPane.showMessageDialog(null, "A distância não pode ser um número negativo. Tente novamente.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Entrada inválida. Por favor, digite apenas o número da distância.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
+                        distancia = -1; // Garante que o loop continue
+                    }
+                }
+
+                if (distancia >= 0) {
+                    valorFrete = calcularFrete(distancia, pizzasDoPedido.size());
+                    String mensagemFrete = String.format("Valor do Frete: R$ %.2f\nValor Total (com frete): R$ %.2f", valorFrete, (valorPizzas + valorFrete));
+                    JOptionPane.showMessageDialog(null, mensagemFrete, "Custo da Entrega", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            // --- Fim da Lógica de Frete ---
+
+            double valorTotalFinal = valorPizzas + valorFrete;
+            int novoId = listaPedidos.stream().mapToInt(Pedido::getId).max().orElse(0) + 1; // ID mais seguro
+            Pedido novoPedido = new Pedido(novoId, clienteSelecionado, pizzasDoPedido, valorTotalFinal, valorFrete);
             listaPedidos.add(novoPedido);
             JOptionPane.showMessageDialog(null, "Pedido Nº " + novoId + " realizado com sucesso!");
         } else {
@@ -134,6 +179,13 @@ public class Pizzaria {
             valorTotal += pizza.getPreco();
         }
         return valorTotal;
+    }
+
+    private static double calcularFrete(double distancia, int quantidadePizzas) {
+        double taxaFixa = 3.00;
+        double custoPorKm = 0.50;
+        double custoPorPizza = 0.25;
+        return taxaFixa + (distancia * custoPorKm) + (quantidadePizzas * custoPorPizza);
     }
 
     private static void alterarPedido(List<Pedido> listaPedidos) {
@@ -214,7 +266,7 @@ public class Pizzaria {
                         Pizza novaPizza = criarNovaPizza();
                         if (novaPizza != null) {
                             pedidoEncontrado.getPizzas().add(novaPizza);
-                            pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()));
+                            pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()) + pedidoEncontrado.getValorFrete());
                             JOptionPane.showMessageDialog(null, "Pizza adicionada com sucesso!");
                         }
                         break;
@@ -234,7 +286,7 @@ public class Pizzaria {
                             int indiceParaRemover = pizzasDescricao.indexOf(pizzaSelecionada);
                             if (indiceParaRemover != -1) {
                                 pedidoEncontrado.getPizzas().remove(indiceParaRemover);
-                                pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()));
+                                pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()) + pedidoEncontrado.getValorFrete());
                                 JOptionPane.showMessageDialog(null, "Pizza removida com sucesso!");
                             }
                         }
@@ -270,7 +322,7 @@ public class Pizzaria {
                         pizzaParaAlterar.getSabores().set(indiceSaborAntigo, novoSabor);
                         double novoPrecoPizza = cardapio.getPrecoJusto(pizzaParaAlterar.getSabores());
                         pizzaParaAlterar.setPreco(novoPrecoPizza);
-                        pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()));
+                        pedidoEncontrado.setValorTotal(somarPizzas(pedidoEncontrado.getPizzas()) + pedidoEncontrado.getValorFrete());
                         JOptionPane.showMessageDialog(null, "Sabor alterado com sucesso!");
                         break;
                     case 3:

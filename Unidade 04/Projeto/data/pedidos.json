@@ -17,7 +17,8 @@
         "tamanho": "GRANDE"
       }
     ],
-    "valorTotal": 34.95
+    "valorTotal": 34.95,
+    "valorFrete": 0.0
   },
   {
     "id": 2,
@@ -36,7 +37,8 @@
         "tamanho": "BROTO"
       }
     ],
-    "valorTotal": 33.0
+    "valorTotal": 33.0,
+    "valorFrete": 0.0
   },
   {
     "id": 3,
@@ -65,6 +67,40 @@
         "tamanho": "GRANDE"
       }
     ],
-    "valorTotal": 71.275
+    "valorTotal": 71.275,
+    "valorFrete": 0.0
+  },
+  {
+    "id": 4,
+    "cliente": {
+      "nome": "Rogerio Matos",
+      "endereco": "Rua Galileu",
+      "telefone": "11968169876",
+      "email": "rogerio.matos@gmail.com"
+    },
+    "pizzas": [],
+    "valorTotal": 0.0,
+    "valorFrete": 0.0
+  },
+  {
+    "id": 5,
+    "cliente": {
+      "nome": "Rogerio Matos",
+      "endereco": "Rua Galileu",
+      "telefone": "11968169876",
+      "email": "rogerio.matos@gmail.com"
+    },
+    "pizzas": [
+      {
+        "sabores": [
+          "Frango com Catupiry",
+          "Quatro queijos"
+        ],
+        "preco": 36.75,
+        "tamanho": "GRANDE"
+      }
+    ],
+    "valorTotal": 41.0,
+    "valorFrete": 4.25
   }
 ]

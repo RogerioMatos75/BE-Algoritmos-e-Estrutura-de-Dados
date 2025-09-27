@@ -62,10 +62,13 @@ Este documento servirá como um guia para as melhorias a serem implementadas no 
     - O relatório final, contendo todas essas informações, é apresentado ao usuário de forma clara e organizada em uma janela de diálogo (`JOptionPane`) com barra de rolagem, garantindo uma boa visualização.
 
 ### 3. Método para Cálculo de Frete
-- **O que será feito:**
-    - Criar uma função que calcula o valor do frete com base na **distância (km)** e na **quantidade de pizzas**.
-    - Integrar este cálculo ao final da criação de um novo pedido.
-    - O valor do frete será somado ao total do pedido.
+- **O que foi implementado:**
+    - A classe `Pedido` foi estendida para incluir um campo `valorFrete`, permitindo que o custo da entrega seja armazenado junto aos dados do pedido.
+    - Uma função `calcularFrete` foi criada em `Pizzaria.java`, utilizando uma fórmula que considera uma taxa fixa, o custo por quilômetro e um valor por quantidade de pizzas.
+    - O cálculo foi integrado ao final do fluxo de *"Fazer Pedido"*:
+        - O sistema pergunta se o usuário deseja entrega e solicita a distância.
+        - A entrada da distância é tratada de forma robusta, com um loop de validação que limpa o texto digitado pelo usuário *(ex: "km", vírgulas)* e pede a informação novamente em caso de erro, tornando a interação mais inteligente e à prova de falhas.
+    - O método `alterarPedido` foi ajustado para que, ao recalcular o valor total após uma modificação, o `valorFrete` original do pedido seja sempre preservado e somado corretamente.
 
 ---
 
@@ -79,9 +82,11 @@ Este documento servirá como um guia para as melhorias a serem implementadas no 
         - **Salvar** o estado atual das listas de volta para os arquivos JSON quando o usuário fecha a aplicação.
     - Os arquivos de dados são armazenados em um novo diretório `Projeto/data/` para manter o projeto organizado.
     - Os comandos de compilação e execução foram atualizados para incluir a biblioteca Gson no classpath:
-      ```shell
-      # Compilar
+      ```java
+      Compilar
       javac -cp ".;Projeto/lib/gson-2.10.1.jar" Projeto/*.java
-      # Executar
+      ```
+      ```java
+      Executar
       java -cp ".;Projeto/lib/gson-2.10.1.jar" Projeto.Pizzaria
       ```

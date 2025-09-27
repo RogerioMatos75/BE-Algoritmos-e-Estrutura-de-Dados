@@ -7,12 +7,14 @@ public class Pedido {
     private Cliente cliente;
     private List<Pizza> pizzas;
     private double valorTotal;
+    private double valorFrete;
 
-    public Pedido(int id, Cliente cliente, List<Pizza> pizzas, double valorTotal){
+    public Pedido(int id, Cliente cliente, List<Pizza> pizzas, double valorTotal, double valorFrete){
         this.id = id;
         this.cliente = cliente;
         this.pizzas = pizzas;
         this.valorTotal = valorTotal;
+        this.valorFrete = valorFrete;
     }
 
     public int getId() {
@@ -37,5 +39,13 @@ public class Pedido {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public double getValorFrete() {
+        return valorFrete;
+    }
+
+    public void setValorFrete(double valorFrete) {
+        this.valorFrete = valorFrete;
     }
 }
